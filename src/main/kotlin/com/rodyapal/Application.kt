@@ -1,15 +1,19 @@
 package com.rodyapal
 
+import com.rodyapal.model.databaseInstance
 import com.rodyapal.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 
-fun main(args: Array<String>) : Unit = EngineMain.main(args)
+fun main()  {
+	embeddedServer(Netty, port = 10002, host = "0.0.0.0", module = Application::module)
+		.start(wait = true)
+}
 
 fun Application.module() {
+	databaseInstance
 	configureMonitoring()
 	configureSerialization()
-	configureDatabases()
 	configureRouting()
 }
