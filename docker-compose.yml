@@ -1,0 +1,27 @@
+services:
+    database:
+        container_name: bank_database
+        image: 'postgres:15'
+        env_file:
+            - .env
+        ports:
+            - '10001:5432'
+
+
+    # Prometheus & Grafana
+    prometheus:
+        image: prom/prometheus
+        container_name: prometheus
+        ports:
+            - "10003:9090"
+        volumes:
+            - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+    grafana:
+        image: grafana/grafana
+        container_name: grafana
+        ports:
+            - "10004:3000"
+        environment:
+            - GF_SECURITY_ADMIN_USER=admin
+            - GF_SECURITY_ADMIN_PASSWORD=admin
