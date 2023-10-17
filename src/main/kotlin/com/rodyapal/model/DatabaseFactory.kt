@@ -9,8 +9,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import javax.sql.DataSource
 
 private const val DATABASE = "bank_database"
-private const val HOST = "localhost" //"bank_database"
-private const val PORT = "10001"
+private const val HOST = "database"
+private const val PORT = "5432"
 private const val URL = "jdbc:postgresql://$HOST:$PORT/$DATABASE"
 private const val USERNAME = "service"
 private const val PASSWORD = "12345654321"

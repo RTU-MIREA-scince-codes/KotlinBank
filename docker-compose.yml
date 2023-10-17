@@ -1,17 +1,31 @@
 services:
     database:
-        container_name: bank_database
-        image: 'postgres:15'
+        container_name: bank_database_kotlin
+        image: postgres
         env_file:
             - .env
         ports:
             - '10001:5432'
+        healthcheck:
+            test: [ "CMD", "pg_isready", "-q", "-d", "${APP_DB_NAME}", "-U", "${APP_DB_USER}" ]
+            interval: 10s
+            timeout: 5s
+            retries: 3
+            start_period: 60s
 
+    application:
+        container_name: bank_system_kotlin
+        build: .
+        ports:
+            - "10002:10002"
+        depends_on:
+            database:
+                condition: service_healthy
 
     # Prometheus & Grafana
     prometheus:
         image: prom/prometheus
-        container_name: prometheus
+        container_name: prometheus_kotlin
         ports:
             - "10003:9090"
         volumes:
@@ -19,7 +33,7 @@ services:
 
     grafana:
         image: grafana/grafana
-        container_name: grafana
+        container_name: grafana_kotlin
         ports:
             - "10004:3000"
         environment:
