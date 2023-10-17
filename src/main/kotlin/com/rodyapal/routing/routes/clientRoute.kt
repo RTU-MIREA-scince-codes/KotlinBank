@@ -53,9 +53,14 @@ fun Route.clientRoute() {
 			toId = dto.bankAccountToId,
 			amount = dto.amount
 		).let {
-			call.respond(
-				status = HttpStatusCode.Created,
-				message = "Transaction ${it.transactionNumber} completed successfully"
+			if (it != null) {
+				call.respond(
+					status = HttpStatusCode.Created,
+					message = "Transaction ${it.transactionNumber} completed successfully"
+				)
+			} else call.respond(
+				status = HttpStatusCode.BadRequest,
+				message = "Transaction cannot be commited"
 			)
 		}
 	}
