@@ -8,14 +8,14 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 
 @Serializable
 data class User(
-	val id: Long,
 	val firstName: String,
 	val lastName: String,
 	val email: String,
 	val telephoneNumber: String,
 	val password: String,
 	val active: Boolean,
-	val userGroups: List<Group>
+	val userGroups: List<Group>,
+	val id: Long? = null,
 )
 
 class UserDao(id: EntityID<Long>) : LongEntity(id) {
@@ -27,6 +27,17 @@ class UserDao(id: EntityID<Long>) : LongEntity(id) {
 	var password by Users.password
 	var active by Users.active
 	val groups by GroupDao referrersOn Groups.user
+
+	fun toEntity() = User(
+		id = id.value,
+		firstName = firstName,
+		lastName = lastName,
+		email = email,
+		telephoneNumber = telephoneNumber,
+		password = password,
+		active = active,
+		userGroups = groups.map { it.toEntity() }
+	)
 }
 
 object Users : LongIdTable("users") {

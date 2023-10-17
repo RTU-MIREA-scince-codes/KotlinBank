@@ -18,6 +18,12 @@ class GroupDao(id: EntityID<Long>) : LongEntity(id) {
 	var code by Groups.code
 	var description by Groups.description
 	var user by UserDao referencedOn Groups.user
+
+	fun toEntity() = Group(
+		id = id.value,
+		code = code,
+		description = description
+	)
 }
 
 object Groups : LongIdTable("groups") {

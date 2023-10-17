@@ -21,11 +21,22 @@ class ClientDao(id: EntityID<Long>) : LongEntity(id) {
 	var clientNumber by Clients.clientNumber
 	var passportNumber by Clients.passportNumber
 	var user by UserDao referencedOn Clients.user
+	var manager by ManagerDao referencedOn Clients.manager
+	val bankAccounts by BankAccountDao referrersOn BankAccounts.client
+
+	fun toEntity() = Client(
+		id = id.value,
+		clientNumber = clientNumber,
+		passportNumber = passportNumber,
+		user = user.toEntity(),
+		manager = manager.toEntity(),
+		bankAccounts = bankAccounts.map { it.toEntity() }
+	)
 }
 
 object Clients : LongIdTable("clients") {
-	val clientNumber = varchar("client_number", length = 255).uniqueIndex()
-	val passportNumber = varchar("passport_number", length = 255).uniqueIndex()
+	val clientNumber = varchar("client_number", length = 32).uniqueIndex()
+	val passportNumber = varchar("passport_number", length = 10).uniqueIndex()
 	val user = reference("user_id", Users)
 	val manager = reference("manager_id", Managers)
 }

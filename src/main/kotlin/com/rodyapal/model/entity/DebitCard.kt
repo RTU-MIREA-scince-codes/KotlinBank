@@ -26,6 +26,15 @@ class DebitCardDao(id: EntityID<Long>) : LongEntity(id) {
 	var balance by DebitCards.balance
 	var active by DebitCards.active
 	var bankAccount by BankAccountDao referencedOn DebitCards.account
+
+	fun toEntity() = DebitCard(
+		id = id.value,
+		cardNumber = cardNumber,
+		cvv = cvv,
+		expirationDate = expirationDate,
+		balance = balance,
+		active = active
+	)
 }
 
 object DebitCards : LongIdTable() {

@@ -12,8 +12,8 @@ data class BankAccount(
 	val accountNumber: String,
 	val balance: Double,
 	val active: Boolean,
-	val client: Client,
-	val debitCards: List<DebitCard>
+	val debitCards: List<DebitCard>,
+	val clientId: Long
 )
 
 class BankAccountDao(id: EntityID<Long>) : LongEntity(id) {
@@ -35,6 +35,15 @@ class BankAccountDao(id: EntityID<Long>) : LongEntity(id) {
 		balance -= amount
 		return true
 	}
+
+	fun toEntity(): BankAccount = BankAccount(
+		id = id.value,
+		accountNumber = accountNumber,
+		balance = balance,
+		active = active,
+		debitCards = debitCards.map { it.toEntity() },
+		clientId = client.id.value
+	)
 }
 
 object BankAccounts : LongIdTable("bank_accounts") {

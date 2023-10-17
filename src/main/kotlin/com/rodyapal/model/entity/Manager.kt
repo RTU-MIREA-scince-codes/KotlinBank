@@ -17,6 +17,12 @@ class ManagerDao(id: EntityID<Long>) : LongEntity(id) {
 	companion object : LongEntityClass<ManagerDao>(Managers)
 	var managerNumber by Managers.managerNumber
 	var user by UserDao referencedOn Managers.user
+
+	fun toEntity() = Manager(
+		id = id.value,
+		managerNumber = managerNumber,
+		user = user.toEntity()
+	)
 }
 
 object Managers : LongIdTable("managers") {
