@@ -13,13 +13,12 @@ fun Application.configureApplication() {
 	val appMicrometerRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 	install(MicrometerMetrics) {
 		registry = appMicrometerRegistry
-		// ...
 	}
 	install(ContentNegotiation) {
 		json()
 	}
 	routing {
-		get("/metrics-micrometer") {
+		get("/metrics") {
 			call.respond(appMicrometerRegistry.scrape())
 		}
 	}
