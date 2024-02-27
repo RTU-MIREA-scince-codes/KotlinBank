@@ -17,7 +17,7 @@ services:
         container_name: bank_system_kotlin
         build: .
         ports:
-            - "10002:10002"
+            - "8082:10002"
         depends_on:
             database:
                 condition: service_healthy
